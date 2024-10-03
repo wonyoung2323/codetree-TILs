@@ -11,10 +11,10 @@ def make_list(n, m, arr, cnt):
     return attack_list
             
 def select_attack(attack_list):
-    now = copy.deepcopy(attack_list)
-    now.sort(key=lambda x : (x[0], -x[1], -x[2], -x[3]))
+    # now = copy.deepcopy(attack_list)
+    attack_list.sort(key=lambda x : (x[0], -x[1], -x[2], -x[3]))
     
-    return now
+    return attack_list
 
 def razor(n, m, arr, pos1, pos2, s):
     dir = [(0, 1), (1, 0), (0, -1), (-1, 0)]
