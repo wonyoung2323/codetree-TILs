@@ -99,7 +99,7 @@ def bomb(n, m, arr, pos1, pos2, s):
             arr[nx][ny] -= (s // 2)
             path.append([nx, ny])
 
-        arr[pos2[0]][pos2[1]] -= select_attack1
+        arr[pos2[0]][pos2[1]] -= s
 
     for i in range(n):
         for j in range(m):
