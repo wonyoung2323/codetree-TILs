@@ -88,7 +88,7 @@ def bomb(n, m, arr, pos1, pos2, s):
         if ny >= m:
             ny = 0
 
-        if [nx, ny] != pos2 and arr[nx][ny] > 0:
+        if [nx, ny] != pos2 and arr[nx][ny] > 0 and [nx, ny] != pos1:
             arr[nx][ny] -= (s // 2)
             path.append([nx, ny])
 
