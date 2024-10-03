@@ -1,11 +1,11 @@
 from collections import deque
 import copy
 
-def make_list(n, m, arr):
+def make_list(n, m, arr, cnt):
     attack_list = []
     for i in range(n):
         for j in range(m):
-            attack_list.append([arr[i][j], 0, i + j, j])
+            attack_list.append([arr[i][j], cnt[i][j], i + j, j])
 
     return attack_list
             
@@ -64,18 +64,19 @@ def razor(n, m, arr, pos1, pos2, s):
                     for jj in range(m):
                         if [ii, jj] not in cpy and [ii, jj] != pos2 and arr[ii][jj] > 0:
                             arr[ii][jj] += 1
-
+                # print('razor', arr)
                 return arr
 
             cpy.append([nx, ny])
             visited[nx][ny] = True
             q.append(cpy)
-    
-    bomb(n, m, arr, pos1, pos2, s)
+
+    return bomb(n, m, arr, pos1, pos2, s)
 
 def bomb(n, m, arr, pos1, pos2, s):
     path = []
     path.append(pos1)
+
     dir = [
         (-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
@@ -95,38 +96,42 @@ def bomb(n, m, arr, pos1, pos2, s):
         if ny >= m:
             ny = 0
 
-        if [nx, ny] != pos1 and arr[nx][ny] > 0:
+        if [nx, ny] != pos2 and arr[nx][ny] > 0:
             arr[nx][ny] -= (s // 2)
             path.append([nx, ny])
 
-        arr[pos2[0]][pos2[1]] -= s
+    arr[pos2[0]][pos2[1]] -= s
 
     for i in range(n):
         for j in range(m):
             if [i, j] not in path and [i, j] != pos2 and arr[i][j] > 0:
                 arr[i][j] += 1
-
+    # print('bomb', arr)
     return arr
 
 
 n, m, k = map(int, input().split())
 
 arr = []
+cnt = [[-1] * m for _ in range(n)]
 # 공격력, 공격 시점, 행과 열 합, 열 값
 attack_list = []
 for _ in range(n):
     arr.append(list(map(int, input().split())))
 
+pos1 = []
 for i in range(k):
-    attack_list = copy.deepcopy(make_list(n, m, arr))
-
+    attack_list = copy.deepcopy(make_list(n, m, arr, cnt))
+    
     weak = select_attack1(attack_list)
     pos1 = [weak[2] - weak[3], weak[3]]
     strong = select_attack2(attack_list)
     pos2 = [strong[2] - strong[3], strong[3]]
     
     arr[pos1[0]][pos1[1]] += (n + m)
+    cnt[pos1[0]][pos1[1]] = i
 
+    # print('start', arr)
     arr = copy.deepcopy(razor(n, m, arr, pos1, pos2, arr[pos1[0]][pos1[1]]))
 
 ans = 0
