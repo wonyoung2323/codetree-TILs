@@ -5,24 +5,16 @@ def make_list(n, m, arr, cnt):
     attack_list = []
     for i in range(n):
         for j in range(m):
-            attack_list.append([arr[i][j], cnt[i][j], i + j, j])
+            if arr[i][j] > 0:
+                attack_list.append([arr[i][j], cnt[i][j], i + j, j])
 
     return attack_list
             
-def select_attack1(attack_list):
-    now = attack_list
+def select_attack(attack_list):
+    now = copy.deepcopy(attack_list)
     now.sort(key=lambda x : (x[0], -x[1], -x[2], -x[3]))
-
-    for al in attack_list:
-        if al[0] <= 0: 
-            continue
-        else:
-            return al
-
-def select_attack2(attack_list):
-    now = attack_list
-    now.sort(key=lambda x : (-x[0], x[1], x[2], x[3]))
-    return now[0]
+    
+    return now
 
 def razor(n, m, arr, pos1, pos2, s):
     dir = [(0, 1), (-1, 0), (0, -1), (1, 0)]
@@ -119,13 +111,12 @@ attack_list = []
 for _ in range(n):
     arr.append(list(map(int, input().split())))
 
-pos1 = []
 for i in range(k):
     attack_list = copy.deepcopy(make_list(n, m, arr, cnt))
     
-    weak = select_attack1(attack_list)
+    weak = select_attack(attack_list)[0]
     pos1 = [weak[2] - weak[3], weak[3]]
-    strong = select_attack2(attack_list)
+    strong = select_attack(attack_list)[-1]
     pos2 = [strong[2] - strong[3], strong[3]]
     
     arr[pos1[0]][pos1[1]] += (n + m)
