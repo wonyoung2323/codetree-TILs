@@ -113,6 +113,9 @@ for _ in range(n):
 
 for i in range(k):
     attack_list = copy.deepcopy(make_list(n, m, arr, cnt))
+
+    if len(attack_list) == 1:
+        break
     
     weak = select_attack(attack_list)[0]
     pos1 = [weak[2] - weak[3], weak[3]]
